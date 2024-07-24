@@ -39,8 +39,8 @@ router.patch('/formClaim/:id/status', async (req, res) => {
         const form=await FormClaim.findById(formClaimId);
         // Send email to admin
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.ADMIN_EMAIL,
+            from: process.env.ADMIN_EMAIL,
+            to: form.email,
             subject: `Updated the status of you'r form to : ${status}`,
             text: `
                 The form has been Updated:
