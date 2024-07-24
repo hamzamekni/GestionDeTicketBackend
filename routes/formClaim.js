@@ -14,6 +14,26 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Search FormClaim by name or email
+router.get('/search', async (req, res) => {
+    try {
+        const { name, email } = req.query;
+
+        // Build the query object
+        let query = {};
+        if (name) {
+            query.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive search
+        }
+        if (email) {
+            query.email = { $regex: new RegExp(email, 'i') }; // Case-insensitive search
+        }
+
+        const formClaims = await FormClaim.find(query);
+        res.status(200).json({ success: true, data: formClaims });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+});
 
 router.get('/formClaims',async (req,res)=>{
     try{
@@ -133,5 +153,7 @@ router.post('/addFormClaim', async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 });
+
+
 
 module.exports = router;
